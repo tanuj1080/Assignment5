@@ -138,11 +138,17 @@ footer {
         border: 1px solid #ddd;
         border-radius: 5px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease; /* Adding transition for smooth scaling */
     }
 
         .team article img {
             width: 100%;
         }
+
+        .team article:hover {
+            transform: scale(1.02); /* Scaling up by 10% on hover */
+        }
+
 
 
 .logo {
