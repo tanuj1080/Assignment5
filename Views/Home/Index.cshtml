@@ -1,0 +1,35 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="banner">
+    <h2>Discover Your Next Read</h2>
+    <p>Embark on a literary adventure with our curated selection of books across genres, from captivating fiction to thought-provoking non-fiction. Get lost in timeless classics, uncover hidden gems, or find the perfect book for your mood. We're here to be your guide on your literary journey.</p>
+    @Html.ActionLink("Explore Books", "Reviews", "Home")
+</section>
+
+<section class="about-us">
+    <h1>Explore Popular Categories</h1>
+    <div class="team">
+        <article>
+            <img src="~/images/Fantasy_image.jpeg" alt="Fantasy books category">
+            <h3>Fantasy</h3>
+            <p>Escape to magical worlds and epic adventures.</p>
+        </article>
+        <article>
+            <img src="~/images/Mystery_image.jpg" alt="Mystery books category">
+            <h3>Mystery</h3>
+            <p>Unravel puzzling crimes and thrilling secrets.</p>
+        </article>
+        <article>
+            <img src="~/images/Manga.jpg" alt="Manga books category">
+            <h3>Manga</h3>
+            <p>Manga is an umbrella term for a wide variety of comic books and graphic novels originally produced and published in Japan.</p>
+        </article>
+        <article>
+            <img src="~/images/Science_fiction.jpg" alt="Science Fiction books category">
+            <h3>Science fiction</h3>
+            <p>Usually futuristic, science fiction speculates about alternative ways of life made possible by technological change. </p>
+        </article>
+    </div>
+</section>
