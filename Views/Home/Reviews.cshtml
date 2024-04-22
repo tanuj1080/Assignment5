@@ -1,4 +1,7 @@
-﻿@{
+﻿@model Review
+
+@{
+    ViewData["Title"] = "Reviews";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -6,56 +9,31 @@
     <section class="hero">
         <h2>Read and Share Reviews</h2>
         <p>Explore book reviews by readers like you or add your own insights for others to discover.</p>
-        <form>
-            <select id="bookDropdown" onchange="filterReviews()">
-                <option value="all">Select a book to filter reviews</option>
+    </section>
+
+    <section class="add-review">
+        <h3>Add a Review</h3>
+        <form asp-controller="Reviews" asp-action="Create" method="post">
+            <label asp-for="BookTitle">Choose a book:</label>
+            <select asp-for="BookTitle" class="form-control">
                 <option value="The Lord of the Rings">The Lord of the Rings</option>
                 <option value="Pride and Prejudice">Pride and Prejudice</option>
-                <option value="The Hitchhiker's guide to the Galaxy">The Hitchhiker's Guide to the Galaxy</option>
+                <option value="The Hitchhiker's Guide to the Galaxy">The Hitchhiker's Guide to the Galaxy</option>
                 <option value="A Brief History of Time">A Brief History of Time</option>
+                <!-- Add more options as needed -->
             </select>
+            <label asp-for="ReviewText">Your Review:</label>
+            <textarea asp-for="ReviewText" class="form-control" placeholder="Write your review here..."></textarea>
+            <button type="submit" class="btn btn-primary">Submit Review</button>
         </form>
     </section>
 
     <section class="reviews-list">
         <h3>Reviews</h3>
         <div id="reviewsContainer">
-            <article class="review">
-                <h4>The Lord of the Rings</h4>
-                <p>"A timeless adventure! Absolutely captivating from start to finish." - John Doe</p>
-                <button class="review-button">Edit</button>
-                <button class="review-button">Delete</button>
-            </article>
-            <article class="review">
-                <h4>Death Note</h4>
-                <p>"A gripping tale of power and morality. Tsugumi Ohba's storytelling is masterful." - Dwayne Johnson</p>
-                <button class="review-button">Edit</button>
-                <button class="review-button">Delete</button>
-            </article>
-            <article class="review">
-                <h4>The Hitchhiker's Guide to the Galaxy</h4>
-                <p>"Hilariously absurd and delightfully witty. A must-read for any sci-fi fan." - Kyle Ray</p>
-                <button class="review-button">Edit</button>
-                <button class="review-button">Delete</button>
-            </article>
-            <!-- Add more dummy reviews as needed -->
+            @* Dynamic review list should be rendered here. For now, let's assume there are no dynamic reviews loaded. *@
+            <!-- This part will be handled dynamically later, for now, it can be static or handled via JavaScript -->
         </div>
-    </section>
-
-
-    <section class="add-review">
-        <h3>Add a Review</h3>
-        <form asp-action="AddReview" method="post">
-            <label for="bookToReview">Choose a book:</label>
-            <select id="bookToReview" name="bookToReview">
-                <option value="The Lord of the Rings">The Lord of the Rings</option>
-                <option value="Pride and Prejudice">Pride and Prejudice</option>
-                <option value="The Hitchhiker's Guide to the Galaxy">The Hitchhiker's Guide to the Galaxy</option>
-                <option value="A Brief History of Time">A Brief History of Time</option>
-            </select>
-            <textarea name="reviewText" placeholder="Write your review here..."></textarea>
-            <button type="submit" class="review-button">Submit Review</button>
-        </form>
     </section>
 </main>
 
