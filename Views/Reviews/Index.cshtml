@@ -1,47 +1,64 @@
 ﻿@model IEnumerable<Bookstore.Models.Review>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Review List";
 }
 
-<h1>Index</h1>
+<div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 1200px; margin: auto; padding-top: 40px; padding-bottom: 40px;">
+    <h1 style="color: #006747; text-align: center; font-size: 28px; margin-bottom: 30px;">Checkout reviews for our fan favourite reads!</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.BookTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReviewText)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReviewerName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReviewText)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReviewerName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ReviewId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ReviewId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ReviewId">Delete</a>
-            </td>
-        </tr>
+    <div style="text-align: center; margin-bottom: 40px;">
+        <a asp-action="Create" style="background-color: #006747; color: white; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-size: 16px;">Create New</a>
+    </div>
+
+    <table class="table" style="box-shadow: 0 2px 15px rgba(0,0,0,0.1);">
+        <thead style="background-color: #004F36; color: #006747;">
+            <tr>
+                <th style="padding: 12px 15px;">
+                    @Html.DisplayNameFor(model => model.BookTitle)
+                </th>
+                <th style="padding: 12px 15px;">
+                    @Html.DisplayNameFor(model => model.ReviewText)
+                </th>
+                <th style="padding: 12px 15px;">
+                    @Html.DisplayNameFor(model => model.ReviewerName)
+                </th>
+                <th style="padding: 12px 15px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr style="background-color: #f9f9f9; border-bottom: 1px solid #ddd; transition: background-color 0.3s;">
+                    <td style="padding: 10px 15px;">
+                        @Html.DisplayFor(modelItem => item.BookTitle)
+                    </td>
+                    <td style="padding: 10px 15px;">
+                        @Html.DisplayFor(modelItem => item.ReviewText)
+                    </td>
+                    <td style="padding: 10px 15px;">
+                        @Html.DisplayFor(modelItem => item.ReviewerName)
+                    </td>
+                    <td style="padding: 10px 15px;">
+                        <a asp-action="Edit" asp-route-id="@item.ReviewId" style="color: #006747; text-decoration: none; margin-right: 10px;">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.ReviewId" style="color: #006747; text-decoration: none; margin-right: 10px;">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.ReviewId" style="color: #c12e2a; text-decoration: none;">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('tr').forEach(function (element) {
+            element.addEventListener('mouseover', function () {
+                this.style.backgroundColor = '#e8f0fe';
+            });
+            element.addEventListener('mouseout', function () {
+                this.style.backgroundColor = '';
+            });
+        });
+    </script>
 }
-    </tbody>
-</table>

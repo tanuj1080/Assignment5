@@ -1,44 +1,48 @@
 ﻿@model Bookstore.Models.Review
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Review";
 }
 
-<h1>Edit</h1>
+<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; padding-top: 40px;">
+    <h1 style="color: #006747; text-align: center; font-size: 24px; margin-bottom: 20px;">Edit Review</h1>
 
-<h4>Review</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div style="background-color: #f9f9f9; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <form asp-action="Edit" style="font-family: Arial, sans-serif;">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ReviewId" />
-            <div class="form-group">
-                <label asp-for="BookTitle" class="control-label"></label>
-                <input asp-for="BookTitle" class="form-control" />
+
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label asp-for="BookTitle" class="control-label" style="color: #006747; display: block; margin-bottom: 5px;">Book Title</label>
+                <input asp-for="BookTitle" class="form-control" style="border-radius: 5px; border: 1px solid #ccc; padding: 10px;" />
                 <span asp-validation-for="BookTitle" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ReviewText" class="control-label"></label>
-                <input asp-for="ReviewText" class="form-control" />
+
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label asp-for="ReviewText" class="control-label" style="color: #006747; display: block; margin-bottom: 5px;">Review Text</label>
+                <input asp-for="ReviewText" class="form-control" style="border-radius: 5px; border: 1px solid #ccc; padding: 10px;" />
                 <span asp-validation-for="ReviewText" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ReviewerName" class="control-label"></label>
-                <input asp-for="ReviewerName" class="form-control" />
+
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label asp-for="ReviewerName" class="control-label" style="color: #006747; display: block; margin-bottom: 5px;">Reviewer Name</label>
+                <input asp-for="ReviewerName" class="form-control" style="border-radius: 5px; border: 1px solid #ccc; padding: 10px;" />
                 <span asp-validation-for="ReviewerName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="form-group" style="text-align: center;">
+                <input type="submit" value="Save" class="btn" style="background-color: #006747; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; cursor: pointer;" />
             </div>
         </form>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div style="text-align: center; margin-top: 20px;">
+        <a asp-action="Index" style="color: #006747; text-decoration: none; font-size: 16px;">Back to List</a>
+    </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

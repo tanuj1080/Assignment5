@@ -1,43 +1,45 @@
 ﻿@model Bookstore.Models.Review
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Review";
 }
 
-<h1>Create</h1>
+<h1 style="color: #006747; font-family: Arial, sans-serif; text-align: center;">Create Review</h1>
 
-<h4>Review</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="BookTitle" class="control-label"></label>
-                <input asp-for="BookTitle" class="form-control" />
-                <span asp-validation-for="BookTitle" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReviewText" class="control-label"></label>
-                <input asp-for="ReviewText" class="form-control" />
-                <span asp-validation-for="ReviewText" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReviewerName" class="control-label"></label>
-                <input asp-for="ReviewerName" class="form-control" />
-                <span asp-validation-for="ReviewerName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+<div class="container" style="background-color: #f9f9f9; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-top: 20px;">
+    <form asp-action="Create" style="font-family: Arial, sans-serif;">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label asp-for="BookTitle" class="control-label" style="margin-bottom: 5px; display: block; font-size: 14px; color: #006747;">Book Title</label>
+            <input asp-for="BookTitle" class="form-control" style="border-radius: 5px; border: 1px solid #ccc; padding: 10px;" />
+            <span asp-validation-for="BookTitle" class="text-danger"></span>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label asp-for="ReviewText" class="control-label" style="margin-bottom: 5px; display: block; font-size: 14px; color: #006747;">Review Text</label>
+            <input asp-for="ReviewText" class="form-control" style="border-radius: 5px; border: 1px solid #ccc; padding: 10px;" />
+            <span asp-validation-for="ReviewText" class="text-danger"></span>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label asp-for="ReviewerName" class="control-label" style="margin-bottom: 5px; display: block; font-size: 14px; color: #006747;">Reviewer Name</label>
+            <input asp-for="ReviewerName" class="form-control" style="border-radius: 5px; border: 1px solid #ccc; padding: 10px;" />
+            <span asp-validation-for="ReviewerName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group" style="text-align: center;">
+            <input type="submit" value="Create" class="btn" style="background-color: #006747; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; cursor: pointer;" />
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div style="text-align: center; margin-top: 20px;">
+    <a asp-action="Index" style="color: #006747; text-decoration: none; font-size: 16px;">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
