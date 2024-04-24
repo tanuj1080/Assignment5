@@ -43,26 +43,29 @@ namespace Bookstore.Controllers
             return View(review);
         }
 
-        // GET: Review/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         // POST: Review/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReviewId,BookTitle,ReviewText,BookID")] Review review)
+
+        public async Task<IActionResult> Create(int bookId, string reviewText, int? reviewId)
         {
+            try{
+            Review review = new Review{
+                BookID = bookId,
+                ReviewText = reviewText,
+                ReviewId = reviewId ?? 0,
+            };
             if (ModelState.IsValid)
             {
-                _context.Add(review);
+                _context.Update(review);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true });
             }
-            return View(review);
+            return Json(new { success = false });
+            }
+            catch(Exception ex)
+            {
+                throw(ex);
+            }
         }
 
         // GET: Review/Edit/5
@@ -117,25 +120,34 @@ namespace Bookstore.Controllers
         }
 
         // GET: Review/Delete/5
+
+        [HttpPost]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                 return Json(new { success = false });
             }
 
             var review = await _context.Review
                 .FirstOrDefaultAsync(m => m.ReviewId == id);
-            if (review == null)
+            if (review != null)
             {
-                return NotFound();
+                _context.Review.Remove(review);
             }
 
-            return View(review);
+            await _context.SaveChangesAsync();
+
+            if (review == null)
+            {
+                return Json(new { success = false });
+            }
+
+            return Json(new { success = true });
         }
 
         // POST: Review/Delete/5
-        [HttpPost, ActionName("Delete")]
+        
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -167,33 +179,29 @@ ViewBag.BookTitles = bookTitles ?? new List<string>(); // Ensures ViewBag.BookTi
 return View(bookTitles);
 }
 
+        [HttpGet]
+        public async Task<IActionResult> BooksDropdown()
+        {
+            // Fetch all book titles from the Books table
+            var books = await _context.Books.Select(b => new { b.BookID, b.BookTitle }).ToListAsync();
 
-[HttpGet]
-public async Task<IActionResult> BooksDropdown()
-{
-    // Fetch all book titles from the Books table
-    var books = await _context.Books.Select(b => new { b.BookID, b.BookTitle }).ToListAsync();
+            // Pass the books list to the view using ViewBag
+            ViewBag.BookTitles = books;
+            return View(books);
+        }
 
-    // Pass the books list to the view using ViewBag
-    ViewBag.BookTitles = books;
-    return View(books);
-}
+        [HttpGet]
+        public async Task<IActionResult> GetReviewTitleByBookID(int bookID)
+        {
+            
+            List<Review> review = await _context.Review
+                                        .Where(r => r.BookID == bookID)?
+                                        .ToListAsync();
 
-[HttpGet]
-public async Task<IActionResult> GetReviewTitleByBookID(int bookID)
-{
-    
-    Review review = await _context.Review
-                                  .Where(r => r.BookID == bookID)?
-                                  .FirstOrDefaultAsync();
-
-    if (review != null)
-        return Json(new { success = true, reviewTitle = review.ReviewText });
-    else
-        return Json(new { success = false });
-}
-
-
-
+            if (review != null)
+                return Json(new { success = true, review = review });
+            else
+                return Json(new { success = false });
+        }
     }
 }

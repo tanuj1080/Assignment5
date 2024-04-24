@@ -7,7 +7,7 @@
         <h2>Read and Share Reviews</h2>
         <p>Explore book reviews by readers like you or add your own insights for others to discover.</p>
         <form>
-            <select id="bookDropdown" onchange="filterReviews()">
+        <select id="bookDropdown">
             <option value="all">Select a book to filter reviews</option>
             @if (ViewBag.BookTitles != null)
             {
@@ -24,48 +24,51 @@
     <section class="reviews-list">
         <h3>Reviews</h3>
         <div id="reviewsContainer">
-            <article class="review">
+            @* <article class="review">
                 <h4 id= "reviewBookTitle"></h4>
                 <p id="bookReview"></p>
-                <button class="review-button">Edit</button>
-                <button class="review-button">Delete</button>
-            </article>
-            
-            <!-- Add more dummy reviews as needed -->
+                <button id="editReview" class="review-button">Edit</button>
+                <button id="deleteReview" class="review-button">Delete</button>
+            </article> *@
         </div>
     </section>
 
 
     <section class="add-review">
-        <h3>Add a Review</h3>
+        <h3>Add or Edit Review</h3>
         <form asp-action="AddReview" method="post">
             <label for="bookToReview">Choose a book:</label>
-            <select id="bookToReview" name="bookToReview">
+            <select id="addNewReview">
+                @if (ViewBag.BookTitles != null)
+                {
+                    foreach (var title in ViewBag.BookTitles)
+                    {
+                        <option value="@title.BookID">@title.BookTitle</option>
+                    }
+                }
+            </select>
+            @* <select id="bookToReview" name="bookToReview">
                 <option value="The Lord of the Rings">The Lord of the Rings</option>
                 <option value="Pride and Prejudice">Pride and Prejudice</option>
                 <option value="The Hitchhiker's Guide to the Galaxy">The Hitchhiker's Guide to the Galaxy</option>
                 <option value="A Brief History of Time">A Brief History of Time</option>
-            </select>
-            <textarea name="reviewText" placeholder="Write your review here..."></textarea>
-            <button type="submit" class="review-button">Submit Review</button>
+            </select> *@
+            <textarea id="addOrEditReviewText" name="reviewText" data-id=0 placeholder="Write your review here..."></textarea>
+
+            <button id="addReview" type="submit" class="review-button">Submit Review</button>
         </form>
     </section>
 </main>
 
 @section Scripts {
-    <script src=
-"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-            integrity=
-"sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
     </script>
     <script type="text/javascript">
    
-            $('#bookDropdown').change(function()
-            {
-                debugger
-            
+    $('#bookDropdown').change(function() {            
     var bookID =$('#bookDropdown').val(); // Example bookID
     var bookTitle = $("#bookDropdown option:selected").text();
     $.ajax({
@@ -74,18 +77,104 @@
         dataType: 'json',
         data: { bookID: bookID },
         success: function(response) {
+            $('.review').remove();
             if(response.success) {
-                $('#bookReview').html(response.reviewTitle);
-                $('#reviewBookTitle').html(bookTitle);
-            } else {
+                $.each(response.review, function(index, review) {
+                    // Create a new article element for each review
+                    var article = $('<article class="review"></article>');
+
+                    // Set the review title
+                    article.append('<h4 id="reviewBookTitle">' + bookTitle + '</h4>');
+
+                    // Set the review text
+                    article.append('<p id="bookReview">' + review.reviewText + '</p>');
+
+                    // Add edit and delete buttons
+                    article.append('<button id="editReview" class="review-button" data-id='+review.reviewId+' onClick="editReview(' + review.reviewId + ', ' + bookID + ', \'' + review.reviewText + '\')">Edit</button>');
+
+                    
+                    article.append('<button id="deleteReview" class="review-button" onClick="deleteReview('+ review.reviewId +')">Delete</button>');
+
+                    // Append the article to the container (assuming there's a container with id "reviewsContainer")
+                    $('#reviewsContainer').append(article);
+                });
+            } 
+            else {
                 alert("No review found for this book.");
             }
         },
         error: function() {
-            alert("Error loading review.");
+            alert("No Review found for this book.");
         }
     });
 });
+
+    $('#addReview').click(function(e) {
+        debugger
+        e.preventDefault();
         
+        var bookId = $('#addNewReview').val(); // Get the selected book ID
+        var reviewText = $('textarea[name="reviewText"]').val(); // Get the review text
+        var reviewId = parseInt($('#addOrEditReviewText').attr('data-id')); // Get the review Id
+        
+        // AJAX request
+        $.ajax({
+            url: '/Review/Create',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                bookId: bookId,
+                reviewId: reviewId,
+                reviewText: reviewText
+            },
+            success: function(response) {
+                if(response.success) {
+                    alert("Review added successfully");
+                    location.reload();
+                }
+                else {
+                    alert("Failed to add a review");                    
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("Failed to add a review");
+            }
+        });
+    });    
+    
+    function deleteReview(reviewId) {
+        
+        debugger
+        
+        // AJAX request
+        $.ajax({
+            url: '/Review/Delete',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: reviewId
+            },
+            success: function(response) {
+                if(response.success) {
+                    alert("Review deleted successfully");
+                    location.reload();
+                }
+                else {
+                    alert("Failed to delete a review");                    
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("Failed to delete a review");
+            }
+        });
+    };    
+    function editReview(reviewId,bookID,reviewText)
+    {
+        debugger
+        $('#addNewReview').val(bookID);
+        $('#addOrEditReviewText').val(reviewText);
+        $('#addOrEditReviewText').attr('data-id',reviewId);
+    }
     </script>
+    
 }
