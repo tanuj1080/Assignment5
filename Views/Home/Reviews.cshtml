@@ -8,12 +8,16 @@
         <p>Explore book reviews by readers like you or add your own insights for others to discover.</p>
         <form>
             <select id="bookDropdown" onchange="filterReviews()">
-                <option value="all">Select a book to filter reviews</option>
-                <option value="The Lord of the Rings">The Lord of the Rings</option>
-                <option value="Pride and Prejudice">Pride and Prejudice</option>
-                <option value="The Hitchhiker's guide to the Galaxy">The Hitchhiker's Guide to the Galaxy</option>
-                <option value="A Brief History of Time">A Brief History of Time</option>
-            </select>
+            <option value="all">Select a book to filter reviews</option>
+            @if (ViewBag.BookTitles != null)
+            {
+                foreach (var title in ViewBag.BookTitles)
+                {
+                    <option value="@title.BookID">@title.BookTitle</option>
+                }
+            }
+        </select>
+
         </form>
     </section>
 
@@ -21,23 +25,12 @@
         <h3>Reviews</h3>
         <div id="reviewsContainer">
             <article class="review">
-                <h4>The Lord of the Rings</h4>
-                <p>"A timeless adventure! Absolutely captivating from start to finish." - John Doe</p>
+                <h4 id= "reviewBookTitle"></h4>
+                <p id="bookReview"></p>
                 <button class="review-button">Edit</button>
                 <button class="review-button">Delete</button>
             </article>
-            <article class="review">
-                <h4>Death Note</h4>
-                <p>"A gripping tale of power and morality. Tsugumi Ohba's storytelling is masterful." - Dwayne Johnson</p>
-                <button class="review-button">Edit</button>
-                <button class="review-button">Delete</button>
-            </article>
-            <article class="review">
-                <h4>The Hitchhiker's Guide to the Galaxy</h4>
-                <p>"Hilariously absurd and delightfully witty. A must-read for any sci-fi fan." - Kyle Ray</p>
-                <button class="review-button">Edit</button>
-                <button class="review-button">Delete</button>
-            </article>
+            
             <!-- Add more dummy reviews as needed -->
         </div>
     </section>
@@ -60,17 +53,39 @@
 </main>
 
 @section Scripts {
-    <script>
-        function filterReviews() {
-            var selectedBook = document.getElementById("bookDropdown").value;
-            var reviews = document.querySelectorAll('.review');
-            reviews.forEach(review => {
-                if (review.querySelector('h4').textContent === selectedBook || selectedBook === "all") {
-                    review.style.display = 'block';
-                } else {
-                    review.style.display = 'none';
-                }
-            });
+    <script src=
+"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity=
+"sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer">
+    </script>
+    <script type="text/javascript">
+   
+            $('#bookDropdown').change(function()
+            {
+                debugger
+            
+    var bookID =$('#bookDropdown').val(); // Example bookID
+    var bookTitle = $("#bookDropdown option:selected").text();
+    $.ajax({
+        url: '/Review/GetReviewTitleByBookID',  // Update the URL based on your routing setup
+        type: 'GET',
+        dataType: 'json',
+        data: { bookID: bookID },
+        success: function(response) {
+            if(response.success) {
+                $('#bookReview').html(response.reviewTitle);
+                $('#reviewBookTitle').html(bookTitle);
+            } else {
+                alert("No review found for this book.");
+            }
+        },
+        error: function() {
+            alert("Error loading review.");
         }
+    });
+});
+        
     </script>
 }
